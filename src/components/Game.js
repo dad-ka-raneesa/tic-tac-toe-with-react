@@ -51,7 +51,7 @@ class Game extends React.Component {
         <h1> Tic Tac Toe </h1>
         <Board class='board' squares={this.state.board} onClick={this.handleChange} />
         <p>{this.getStatus()}</p>
-        <Button value='Start Game' onClick={this.restartGame} />
+        <Button value='Start New Game' onClick={this.restartGame} />
       </div>
     );
   }
