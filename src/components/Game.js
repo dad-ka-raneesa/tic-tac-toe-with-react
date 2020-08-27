@@ -8,7 +8,8 @@ class Game extends React.Component {
     super(props);
     this.state = {
       board: Array(9).fill(null),
-      player1IsNext: true,
+      currentPlayer: { name: 'Player1', symbol: 'X' },
+      nextPlayer: { name: 'Player2', symbol: 'O' },
       winner: null
     };
     this.handleChange = this.handleChange.bind(this);
@@ -16,12 +17,13 @@ class Game extends React.Component {
   }
 
   handleChange(id) {
-    const board = [...this.state.board];
+    const board = this.state.board.slice();
     if (this.state.winner || board[id]) return;
-    board[id] = this.state.player1IsNext ? 'X' : 'O';
+    board[id] = this.state.currentPlayer.symbol;
     this.setState({
       board: board,
-      player1IsNext: !this.state.player1IsNext,
+      currentPlayer: this.state.nextPlayer,
+      nextPlayer: this.state.currentPlayer,
       winner: calculateWinner(board)
     });
   };
@@ -29,7 +31,8 @@ class Game extends React.Component {
   restartGame() {
     this.setState({
       board: Array(9).fill(null),
-      player1IsNext: true,
+      currentPlayer: { name: 'Player1', symbol: 'X' },
+      nextPlayer: { name: 'Player2', symbol: 'O' },
       winner: null
     })
   }
@@ -40,9 +43,9 @@ class Game extends React.Component {
       return 'Game Draw';
     }
     if (this.state.winner) {
-      return `Winner: ${this.state.winner}`;
+      return `Winner: ${this.state.nextPlayer.name}`;
     }
-    return `Next player: ${this.state.player1IsNext ? 'X' : 'O'}`
+    return `${this.state.currentPlayer.name}'s Turn`
   }
 
   render() {
@@ -50,7 +53,7 @@ class Game extends React.Component {
       <div style={{ margin: '20px' }}>
         <h1> Tic Tac Toe </h1>
         <Board class='board' squares={this.state.board} onClick={this.handleChange} />
-        <p>{this.getStatus()}</p>
+        <h3>{this.getStatus()}</h3>
         <Button value='Start New Game' onClick={this.restartGame} />
       </div>
     );
