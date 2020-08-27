@@ -1,7 +1,8 @@
 import React from 'react';
 import { calculateWinner } from '../calculateWinner';
-import Board from './Board';
 import Button from './Button';
+import Board from './Board';
+import Status from './Status';
 
 class Game extends React.Component {
   constructor(props) {
@@ -40,14 +41,6 @@ class Game extends React.Component {
     })
   }
 
-  getStatus() {
-    const { currentPlayer, isDraw, winner } = this.state;
-    let gameStatus = `${currentPlayer.name}'s Turn`;
-    isDraw && (gameStatus = 'Game Draw!');
-    winner && (gameStatus = `${winner.name} won!`)
-    return gameStatus;
-  }
-
   render() {
     const { isDraw, winner, currentPlayer, board } = this.state;
     const status = { isDraw, winner };
@@ -56,7 +49,7 @@ class Game extends React.Component {
       <div style={{ margin: '20px' }}>
         <h1> Tic Tac Toe </h1>
         <Board class='board' status={status} currentPlayer={currentPlayer} tiles={board} onClick={this.handleChange} />
-        <h3>{this.getStatus()}</h3>
+        <Status currentPlayer={currentPlayer} status={status} />
         <Button value='Start New Game' onClick={this.restartGame} />
       </div>
     );
