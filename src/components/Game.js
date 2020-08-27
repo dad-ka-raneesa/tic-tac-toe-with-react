@@ -10,6 +10,7 @@ class Game extends React.Component {
       board: Array(9).fill(null),
       currentPlayer: { name: 'Player1', symbol: 'X' },
       nextPlayer: { name: 'Player2', symbol: 'O' },
+      isDraw: false,
       winner: null
     };
     this.handleChange = this.handleChange.bind(this);
@@ -18,14 +19,15 @@ class Game extends React.Component {
 
   handleChange(id) {
     const board = this.state.board.slice();
-    if (this.state.winner || board[id]) return;
     board[id] = this.state.currentPlayer.symbol;
-    this.setState({
+
+    this.setState(({ currentPlayer, nextPlayer }) => ({
       board: board,
-      currentPlayer: this.state.nextPlayer,
-      nextPlayer: this.state.currentPlayer,
-      winner: calculateWinner(board)
-    });
+      currentPlayer: nextPlayer,
+      nextPlayer: currentPlayer,
+      isDraw: board.every((value) => value),
+      winner: calculateWinner(board, currentPlayer)
+    }));
   };
 
   restartGame() {
@@ -33,26 +35,27 @@ class Game extends React.Component {
       board: Array(9).fill(null),
       currentPlayer: { name: 'Player1', symbol: 'X' },
       nextPlayer: { name: 'Player2', symbol: 'O' },
+      isDraw: false,
       winner: null
     })
   }
 
   getStatus() {
-    const isFilled = this.state.board.every((name) => name);
-    if (isFilled) {
-      return 'Game Draw';
-    }
-    if (this.state.winner) {
-      return `Winner: ${this.state.nextPlayer.name}`;
-    }
-    return `${this.state.currentPlayer.name}'s Turn`
+    const { currentPlayer, isDraw, winner } = this.state;
+    let gameStatus = `${currentPlayer.name}'s Turn`;
+    isDraw && (gameStatus = 'Game Draw!');
+    winner && (gameStatus = `${winner.name} won!`)
+    return gameStatus;
   }
 
   render() {
+    const { isDraw, winner, currentPlayer, board } = this.state;
+    const status = { isDraw, winner };
+
     return (
       <div style={{ margin: '20px' }}>
         <h1> Tic Tac Toe </h1>
-        <Board class='board' squares={this.state.board} onClick={this.handleChange} />
+        <Board class='board' status={status} currentPlayer={currentPlayer} tiles={board} onClick={this.handleChange} />
         <h3>{this.getStatus()}</h3>
         <Button value='Start New Game' onClick={this.restartGame} />
       </div>

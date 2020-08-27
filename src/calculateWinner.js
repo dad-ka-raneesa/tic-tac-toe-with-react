@@ -1,5 +1,5 @@
-export function calculateWinner(squares) {
-  const lines = [
+export function calculateWinner(tiles, currentPlayer) {
+  const WINNING_CONDITIONS = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -10,11 +10,7 @@ export function calculateWinner(squares) {
     [2, 4, 6]
   ];
 
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
+  const doesInclude = (index) => tiles[index] === currentPlayer.symbol;
+  const isWin = WINNING_CONDITIONS.some((row) => row.every(doesInclude));
+  return isWin ? currentPlayer : null;
 }

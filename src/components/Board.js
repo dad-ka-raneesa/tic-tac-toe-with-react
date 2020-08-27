@@ -4,11 +4,12 @@ import Button from './Button';
 const Board = (props) => {
   return (
     <div className={props.class}>
-      {props.squares.map((square, id) => (
+      {props.tiles.map((value, id) => (
         <Button
-          class='square'
+          class='tile'
+          disabled={props.status.winner || value}
           key={id}
-          value={square}
+          value={value}
           onClick={() => props.onClick(id)}
         />
       ))}
