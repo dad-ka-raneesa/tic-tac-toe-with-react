@@ -36,16 +36,17 @@ class Game extends React.Component {
   }
 
   handleChange(id) {
-    const board = this.state.board.slice();
-    board[id] = this.state.currentPlayer.symbol;
-
-    this.setState(({ currentPlayer, nextPlayer }) => ({
-      board: board,
-      currentPlayer: nextPlayer,
-      nextPlayer: currentPlayer,
-      isDraw: board.every((value) => value),
-      winner: this.getWinnerStatus(board)
-    }));
+    this.setState(({ board, currentPlayer, nextPlayer }) => {
+      const newBoard = board.slice();
+      newBoard[id] = currentPlayer.symbol;
+      return {
+        board: newBoard,
+        currentPlayer: nextPlayer,
+        nextPlayer: currentPlayer,
+        isDraw: board.every((value) => value),
+        winner: this.getWinnerStatus(newBoard)
+      }
+    });
   };
 
   restartGame() {
